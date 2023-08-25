@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+
+<body class="bg-blue-950 text-white ">
+    <h1>File Upload</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="files" multiple>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+<script>
+    const form = document.getElementById('upload-form');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const files = document.querySelector('[type=file]').files;
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            formData.append("filename", file.name);
+            formData.append('files', file);
+        }
+        fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+
+</html>
