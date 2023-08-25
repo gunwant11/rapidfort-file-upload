@@ -1,33 +1,34 @@
 name: Build Docker Image
 
 on:
-    push:
-        branches: ['master']
+  push:
+    branches: ["master"]
+  workflow_dispatch:
 
 jobs:
-    build_and_push_docker_image:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Repo
-              uses: actions/checkout@v2
+  build_and_push_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
 
-            - name: Login to DockerHub
-              uses: docker/login-action@v2
-              with:
-                  username: ${{ secrets.DOCKERHUB_USERNAME }}
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
-            
-            - name: Extract metadate (tags, labels) for Docker
-              id: meta
-              uses: docker/metadata-action@v3
-              with:
-                  images: 'docker.io/gunwant11/rf-uploader'
-                  tags: 'latest'
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-            - name: Build and push Docker image
-              uses: docker/build-push-action@v2
-              with:
-                  context: .
-                  push: true
-                  tags: ${{ steps.meta.outputs.tags }}
-                  labels: ${{ steps.meta.outputs.labels }}
+      - name: Extract metadate (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: "docker.io/gunwant11/rf-uploader"
+          tags: "latest"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
