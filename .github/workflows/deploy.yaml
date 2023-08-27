@@ -66,9 +66,9 @@ jobs:
         uses: Azure/k8s-deploy@v1
         with:
           manifests: |
-            kubernetes/deployment.yml
-            kubernetes/service.yml
-            kubernetes/ingress.yml
+            kubernetes/deployment.yaml
+            kubernetes/service.yaml
+            kubernetes/ingress.yaml
           images: |
             gunwant11/rf-uploader:lastest
           imagepullsecrets: |
