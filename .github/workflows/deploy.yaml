@@ -1,17 +1,12 @@
-name:  Deployment on AKS
+name: Build and Deploy to AKS
 
-# input staging or production as environment and deploy to the respective cluster my docker image
 on:
   workflow_dispatch:
     inputs:
       environment:
         description: "Environment to deploy to"
         required: true
-        type: choice
         default: "staging"
-        options:
-          - "production"
-          - "staging"
 
 jobs:
   build:
@@ -20,6 +15,9 @@ jobs:
       DOCKER_REPOSITORY: gunwant11
       DOCKER_IMAGE_NAME: rf-uploader
       DOCKER_IMAGE_TAG: ${{ github.run_number }}
+      DOCKER_REPOSITORY_URL: https://index.docker.io/v1/
+      AKS_CLUSTER_NAME: aks-cluster
+      AKS_RESOURCE_GROUP: rg-aks
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -37,7 +35,7 @@ jobs:
           images: ${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}
           tags: "latest"
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image to DockerHub
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -48,20 +46,20 @@ jobs:
       - uses: Azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          resource-group: 'rg-aks'
-          cluster-name: 'aks-cluster'
+          resource-group: ${{ env.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
       
-      - name:  Deploy on AKS
+      - name:  Create secret for AKS
         uses: Azure/k8s-create-secret@v1
         with:
           secret-name: project-secret
-          container-registry-url: https://index.docker.io/v1/
+          container-registry-url: ${{ env.DOCKER_REPOSITORY_URL }}
           container-registry-username: ${{ secrets.DOCKERHUB_USERNAME }}
           container-registry-password: ${{ secrets.DOCKERHUB_PASSWORD }}
           secret-type: docker-registry
 
       
-      - name:  Deploy on AKS
+      - name: Deploy to AKS
         uses: Azure/k8s-deploy@v1
         with:
           manifests: |
@@ -72,4 +70,3 @@ jobs:
             gunwant11/rf-uploader:latest
           imagepullsecrets: |
             project-secret
-
