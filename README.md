@@ -1,104 +1,76 @@
 # File Info Web Server
 
 This project is a REST API-based web server that accepts file uploads and provides information about the uploaded files. It's built using FastAPI, a modern web framework for building APIs with Python. The server also includes a simple UI for easy interaction.
-
 ## Table of Contents
 
 - [File Info Web Server](#file-info-web-server)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
   - [Usage](#usage)
-    - [Uploading Files](#uploading-files)
-    - [Accessing the UI](#accessing-the-ui)
-  - [Dockerization](#dockerization)
-    - [Building the Docker Image](#building-the-docker-image)
-    - [Running the Docker Container](#running-the-docker-container)
-  - [Kubernetes Deployment](#kubernetes-deployment)
   - [API Documentation](#api-documentation)
     - [GET `/`](#get-)
     - [POST `/upload/`](#post-upload)
-  - [Shell Scripts](#shell-scripts)
+  - [Kubernetes Deployment](#kubernetes-deployment)
   - [Thank you for reading this far!](#thank-you-for-reading-this-far)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.x
-- Docker (for Dockerization)
-- Kubernetes (for Kubernetes deployment)
+Before you start, ensure you have the following tools installed:
 
-### Installation
+- Docker: For containerization
+- Minikube: For local Kubernetes deployment
 
-1. Clone the repository:
+## Usage
+
+Follow these steps to quickly set up and run the server:
+
+1. **Clone the Repository:**
 
    ```bash
    git clone https://github.com/your-username/file-info-web-server.git
    cd file-info-web-server
    ```
 
-2. Install the required Python packages:
+2. **Run the Initialization Script:**
 
    ```bash
-   pip install -r requirements.txt
+   chmod +x init.sh
+   ./init.sh
    ```
 
-## Usage
+   This script performs the following actions:
 
-### Uploading Files
+   - Stops and removes any existing container named `rf-upload`.
+   - Builds a Docker image named `rf-file-upload` based on the provided Dockerfile.
+   - Runs a new Docker container with port 8000 mapped and a volume linking the host directory to the container's `/app` directory.
+   - Outputs "running on port 8000".
 
-You can upload files to the server using the `/upload/` endpoint. You can use tools like `curl` or API testing tools like Postman.
+   The server is now accessible at `http://localhost:8000`. To stop the server, use the following command:
 
-Example using `curl`:
+   ```bash
+   chmod +x stop.sh
+   ./stop.sh
+   ```
 
-```bash
-curl -X POST -F "files=@path/to/your/file.txt" http://localhost:8000/upload/
-```
+3. **Access the Web UI:**
 
-### Accessing the UI
-
-The server includes a simple UI that can be accessed by navigating to `http://localhost:8000/home` in your web browser.
-
-## Dockerization
-
-### Building the Docker Image
-
-To build a Docker image of the project, execute the following command:
-
-```bash
-docker build -t file-info-web-server .
-```
-
-### Running the Docker Container
-
-After building the Docker image, you can run a container using the following command:
-
-```bash
-docker run -p 8000:8000 file-info-web-server
-```
-
-## Kubernetes Deployment
-
-You can deploy the web server on Kubernetes using the provided Kubernetes manifest files located in the `kubernetes/` directory.
-
-```bash
-kubectl apply -f kubernetes/
-```
+   The web UI is available at `http://localhost:8000/home`.
 
 ## API Documentation
 
 ### GET `/`
 
-- **Description:** Endpoint to check if the server is running.
+- **Description:** Endpoint to check the server status.
 - **Response:**
   - HTTP Status Code: 200 OK
   - Response Body: `{"message": "Hello World"}`
 
 ### POST `/upload/`
 
-- **Description:** Endpoint to upload files and get information about them.
+- **Description:** Endpoint to upload files and retrieve their information.
 - **Request:**
   - Method: POST
   - Headers: `Content-Type: multipart/form-data`
@@ -119,17 +91,24 @@ kubectl apply -f kubernetes/
     }
     ```
 
-## Shell Scripts
+## Kubernetes Deployment
 
-The following shell scripts are provided for convenience:
+To deploy the web server on Kubernetes using Minikube, follow these steps:
 
-- `init.sh`: Bash script to start the server.
-- `stop.sh`: Bash script to stop the server.
+1. Start Minikube:
 
+   ```bash
+   minikube start
+   ```
 
+2. Apply the Kubernetes manifest files:
 
+   ```bash
+   kubectl apply -f kubernetes/
+   ```
 
+   The web server will be accessible using the Minikube IP and port.
 
 ## Thank you for reading this far!
-If you have any questions or suggestions, feel free to open an issue or contact me on [Twitter](https://twitter.com/gunwant11).
 
+If you have any questions or suggestions, feel free to open an issue or contact me on [Twitter](https://twitter.com/gunwant11). Your feedback is appreciated!
