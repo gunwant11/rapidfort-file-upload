@@ -5,6 +5,6 @@ docker rm rf-upload
 #  build the image
 docker build -t rf-file-upload .
 #  run the container
-docker run -d -p 80:80 -v .:/app --name rf-upload rf-file-upload
+docker run -d -p 8000:8000 -v .:/app --name rf-upload rf-file-upload
 
-echo "running on port 80"
+echo "running on port 8000"

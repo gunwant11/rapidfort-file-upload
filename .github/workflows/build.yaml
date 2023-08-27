@@ -10,6 +10,10 @@ on:
 jobs:
   build_and_push_docker_image:
     runs-on: ubuntu-latest
+    env: 
+      DOCKER_REPOSITORY: gunwant11
+      DOCKER_IMAGE_NAME: rf-uploader
+      DOCKER_IMAGE_TAG: ${{ github.run_number }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -24,8 +28,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: "docker.io/gunwant11/rf-uploader"
-          tags: "latest"
+          images: ${{ env.DOCKER_REPOSITORY }}/${{ env.DOCKER_IMAGE_NAME }}
+          tags: ${{ env.DOCKER_IMAGE_TAG }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2

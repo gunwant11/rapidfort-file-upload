@@ -18,5 +18,5 @@ spec:
       - name: rf-file-upload
         image: gunwant11/rf-uploader:latest
         ports:
-        - containerPort: 80
+        - containerPort: 8000
 
