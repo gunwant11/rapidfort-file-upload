@@ -1,0 +1,18 @@
+name: Create Deployment on AKS 
+
+# input staging or production as environment and deploy to the respective cluster my docker image
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    

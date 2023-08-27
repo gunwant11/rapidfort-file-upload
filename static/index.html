@@ -2,43 +2,153 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Document</title>
+    <title>File Uploader</title>
 </head>
 
-<body class="bg-blue-950 text-white ">
-    <h1>File Upload</h1>
+<body class="bg-gray-900 text-white p-20 grid place-items-center">
+    <h1 class="text-5xl font-bold mb-3">File Uploader</h1>
+    <p class="mb-5 text-lg">Upload your files to get information about them</p>
     <form id="upload-form" enctype="multipart/form-data">
-        <input type="file" name="files" multiple>
-        <button type="submit">Upload</button>
+        <div class="flex gap-2">
+            <input type="file" name="files" multiple class="border-2 border-slate-400 rounded" />
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 rounded">
+                Upload
+            </button>
+        </div>
     </form>
+
+    <div class="mt-5" id="table-container">
+        <div class="overflow-auto lg:overflow-visible">
+            <table class="table text-gray-400 border-separate space-y-6 text-sm">
+                <thead class="bg-gray-700 text-gray-300">
+                    <tr>
+                        <th class="p-3">File Name</th>
+                        <th class="p-3 text-left">Mime Type</th>
+                        <th class="p-3 text-left">Size</th>
+                        <th class="p-3 text-left">Extension</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr class="bg-gray-800">
+                        <td class="p-3">
+                            <div class="flex align-items-center">
+                                <div class="ml-3">
+                                    <div class="">Appple</div>
+                                    <div class="text-gray-500">mail@rgmail.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-3">Technology</td>
+                        <td class="p-3 font-bold">200.00$</td>
+                        <td class="p-3">
+                            <span class="bg-green-400 text-gray-50 rounded-md px-2">available</span>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
+
+<style>
+    .table {
+        border-spacing: 0 10px;
+    }
+    
+    i {
+        font-size: 1rem !important;
+    }
+    
+    .table tr {
+        border-radius: 20px;
+    }
+    
+    tr td:nth-child(n + 4),
+    tr th:nth-child(n + 4) {
+        border-radius: 0 0.625rem 0.625rem 0;
+    }
+    
+    tr td:nth-child(1),
+    tr th:nth-child(1) {
+        border-radius: 0.625rem 0 0 0.625rem;
+    }
+</style>
+
 <script>
-    const form = document.getElementById('upload-form');
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        const files = document.querySelector('[type=file]').files;
+    const form = document.getElementById("upload-form");
+
+    async function uploadFile(files) {
         const formData = new FormData();
         for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-            formData.append("filename", file.name);
-            formData.append('files', file);
+            formData.append("files", files[i]);
         }
-        fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Success:', result);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        const response = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+        }).catch((error) => {
+            console.error("Error:", error);
+        });
+        const data = await response.json();
+        return data;
+    }
+
+    function rowTemplate(filename, type, extension, size) {
+        return `<tr class="bg-gray-800">
+                            <td class="p-3">
+                                <div class="flex align-items-center">
+                                    <div class="ml-3">
+                                        <div class="">${filename}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-3">
+                                ${type}
+                            </td>
+                            <td class="p-3 font-bold">
+                                ${size}
+                            </td>
+                            <td class="p-3">
+                                <span class="bg-green-500 text-gray-50 rounded-md px-2">${extension}</span>
+                            </td>
+    
+            </tr>`;
+    }
+
+    function fileSizeInKb(size) {
+        return `${Math.round(size / 1000)} KB`;
+    }
+
+    function showTable(data) {
+        const tableContainer = document.getElementById("table-container");
+        const tableBody = document.querySelector("tbody");
+        tableBody.innerHTML = "";
+
+        data.forEach((file) => {
+            const {
+                filename,
+                mime_type,
+                extension,
+                size
+            } = file;
+            const sizeInKb = fileSizeInKb(size);
+            const row = rowTemplate(filename, mime_type, extension, sizeInKb);
+            tableBody.innerHTML += row;
+        });
+
+    }
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const files = document.querySelector("[type=file]").files;
+        console.log(files);
+        uploadFile(files).then((data) => {
+            showTable(data.files);
+            document.querySelector("[type=file]").files = null;
+        });
     });
 </script>
-
 
 </html>

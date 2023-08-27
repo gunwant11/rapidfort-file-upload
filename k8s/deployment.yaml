@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rf-file-upload
+  labels:
+    app: rf-file-upload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rf-file-upload
+  template:
+    metadata:
+      labels:
+        app:  rf-file-upload
+    spec:
+      containers:
+      - name: rf-file-upload
+        image: gunwant11/rf-uploader:latest
+        ports:
+        - containerPort: 80
+
