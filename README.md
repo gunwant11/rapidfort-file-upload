@@ -12,6 +12,9 @@ This project is a REST API-based web server that accepts file uploads and provid
     - [GET `/`](#get-)
     - [POST `/upload/`](#post-upload)
   - [Kubernetes Deployment](#kubernetes-deployment)
+  - [GitHub Actions](#github-actions)
+    - [Build and Publish Workflow](#build-and-publish-workflow)
+  - [Bonus](#bonus)
   - [Thank you for reading this far!](#thank-you-for-reading-this-far)
 
 ## Getting Started
@@ -108,6 +111,17 @@ To deploy the web server on Kubernetes using Minikube, follow these steps:
    ```
 
    The web server will be accessible using the Minikube IP and port.
+
+## GitHub Actions
+
+### Build and Publish Workflow
+
+The `build-and-publish` GitHub Actions workflow builds the Docker image and publishes it to DockerHub with tags `latest` and a new version tag. You can trigger this workflow by pushing to the repository or manually from the Actions tab.
+
+## Bonus
+<!-- created an action delpoy.ymal to deploy our image wiht tag latest to aks cluster and   -->
+Created a workflow to deploy the image to AKS cluster. The workflow is triggered when a new image is pushed to DockerHub. The workflow uses the [Azure/k8s-deploy] action to deploy the image to AKS. The workflow is defined in the file `.github/workflows/deploy.yml`.
+
 
 ## Thank you for reading this far!
 
