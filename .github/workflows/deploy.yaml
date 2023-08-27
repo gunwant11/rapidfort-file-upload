@@ -69,7 +69,7 @@ jobs:
             kubernetes/service.yaml
             kubernetes/ingress.yaml
           images: |
-            gunwant11/rf-uploader:lastest
+            gunwant11/rf-uploader:latest
           imagepullsecrets: |
             project-secret
 
