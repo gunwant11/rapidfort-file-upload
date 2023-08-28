@@ -11,7 +11,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello World"}
+    return {"message": "API is running"}
 
 @app.post("/upload/")
 async def upload_files(files: List[UploadFile] = File(...)):

@@ -1,21 +1,6 @@
 # File Info Web Server
 
-This project is a REST API-based web server that accepts file uploads and provides information about the uploaded files. It's built using FastAPI, a modern web framework for building APIs with Python. The server also includes a simple UI for easy interaction.
-## Table of Contents
-
-- [File Info Web Server](#file-info-web-server)
-  - [Table of Contents](#table-of-contents)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-  - [Usage](#usage)
-  - [API Documentation](#api-documentation)
-    - [GET `/`](#get-)
-    - [POST `/upload/`](#post-upload)
-  - [Kubernetes Deployment](#kubernetes-deployment)
-  - [GitHub Actions](#github-actions)
-    - [Build and Publish Workflow](#build-and-publish-workflow)
-  - [Bonus](#bonus)
-  - [Thank you for reading this far!](#thank-you-for-reading-this-far)
+This project is a REST API-based web server that accepts file uploads and provides information about the uploaded files. It's built using FastAPI, a web framework for building APIs with Python. The server also includes a simple UI for easy interaction. The server is containerized using Docker and can be deployed on Kubernetes. CI/CD is implemented using GitHub Actions.
 
 ## Getting Started
 
@@ -25,6 +10,7 @@ Before you start, ensure you have the following tools installed:
 
 - Docker: For containerization
 - Minikube: For local Kubernetes deployment
+- GitHub : For CI/CD
 
 ## Usage
 
@@ -46,9 +32,9 @@ Follow these steps to quickly set up and run the server:
 
    This script performs the following actions:
 
-   - Stops and removes any existing container named `rf-upload`.
    - Builds a Docker image named `rf-file-upload` based on the provided Dockerfile.
    - Runs a new Docker container with port 8000 mapped and a volume linking the host directory to the container's `/app` directory.
+   - If any previous containers are running, they are stopped and removed.
    - Outputs "running on port 8000".
 
    The server is now accessible at `http://localhost:8000`. To stop the server, use the following command:
@@ -61,6 +47,7 @@ Follow these steps to quickly set up and run the server:
 3. **Access the Web UI:**
 
    The web UI is available at `http://localhost:8000/home`.
+   You can upload files using the form and view information about the uploaded files.
 
 ## API Documentation
 
@@ -69,7 +56,7 @@ Follow these steps to quickly set up and run the server:
 - **Description:** Endpoint to check the server status.
 - **Response:**
   - HTTP Status Code: 200 OK
-  - Response Body: `{"message": "Hello World"}`
+  - Response Body: `{"message": "API is running"}`
 
 ### POST `/upload/`
 
@@ -94,9 +81,30 @@ Follow these steps to quickly set up and run the server:
     }
     ```
 
+## Docker Specification
+
+The Docker image is based on the official Python 3.9 image. The following steps are performed during the build process:
+
+1. Install the required Python packages using `pip`.
+2. Copy the source code to the `/app` directory.
+3. Expose port 8000.
+4. Set the working directory to `/app`.
+5. Run the server using `uvicorn`.
+
+Manual commands:
+
+```bash
+docker build -t <image name > .
+docker run -p 8000:8000 -v $(pwd):/app <image name>
+```
+
 ## Kubernetes Deployment
 
-To deploy the web server on Kubernetes using Minikube, follow these steps:
+For Kubernetes deployment, the following files are provided:
+
+- `kubernetes/deployment.yaml`: Deployment manifest which creates a deployment with 1 replica and latest image tag.
+- `kubernetes/service.yaml`: Service manifest which creates a service of type LoadBalancer to expose the deployment.
+- `kubernetes/ingress.yaml`: Ingress manifest which creates an ingress to route traffic to the service.
 
 1. Start Minikube:
 
@@ -109,8 +117,13 @@ To deploy the web server on Kubernetes using Minikube, follow these steps:
    ```bash
    kubectl apply -f kubernetes/
    ```
+3. Expose the service:
 
-   The web server will be accessible using the Minikube IP and port.
+   ```bash
+    minikube service  rf-service
+    ```
+This will open the service in the default browser.
+By default, the service is exposed on port 8000. You can access the service at `http://<minikube ip>/home`.
 
 ## GitHub Actions
 
