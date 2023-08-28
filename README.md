@@ -151,7 +151,7 @@ The following environment variables are used in the project:
 - DOCKERHUB_TOKEN: DockerHub access token
   
   ### Flowchart
-  ![flowchart]('./static/images/flowchart.png')
+  ![flowchart](https://github.com/gunwant11/rapidfort-file-upload/blob/master/static/images/flowchat.png?raw=true)
 
 ## Bonus
 <!-- created an action delpoy.ymal to deploy our image wiht tag latest to aks cluster and   -->
