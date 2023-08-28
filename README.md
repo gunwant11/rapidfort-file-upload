@@ -54,32 +54,16 @@ Follow these steps to quickly set up and run the server:
 
 ## API Documentation
 
-|| Endpoint       | GET `/`                              |
-|----------------|--------------------------------------|
+| Endpoint       | GET `/`                |
+|----------------|------------------------|
 | **Description**| Endpoint to check the server status. |
-| **Response**   | - HTTP Status Code: 200 OK           |
-|                | - Response Body: `{"message": "API is running"}` |
+| **Response**   | - HTTP Status Code: 200 OK<br>- Response Body: `{"message": "API is running"}` |
 
-| Endpoint       | POST `/upload/`                      |
-|----------------|--------------------------------------|
+| Endpoint       | POST `/upload/`                    |
+|----------------|------------------------------------|
 | **Description**| Endpoint to upload files and retrieve their information. |
-| **Request**    | - Method: POST                       |
-|                | - Headers: `Content-Type: multipart/form-data` |
-|                | - Body: Form data with the uploaded file(s) |
-| **Response**   | - HTTP Status Code: 200 OK           |
-|                | - Response Body: JSON containing information about uploaded file(s), e.g.: |
-|                | ```json                              |
-|                | {                                    |
-|                |   "files": [                         |
-|                |     {                                |
-|                |       "filename": "file.txt",        |
-|                |       "mime_type": "text/plain",     |
-|                |       "size": 1234,                  |
-|                |       "extension": "txt"             |
-|                |     }                                |
-|                |   ]                                  |
-|                | }                                    |
-
+| **Request**    | - Method: POST<br>- Headers: `Content-Type: multipart/form-data`<br>- Body: Form data with the uploaded file(s) |
+| **Response**   | - HTTP Status Code: 200 OK<br>- Response Body: JSON containing information about uploaded file(s), e.g.:<br>json<br>{<br>  "files": [<br>    {<br>      "filename": "file.txt",<br>      "mime_type": "text/plain",<br>      "size": 1234,<br>      "extension": "txt"<br>    }<br>  ]<br>} |
 
 ## Docker Specification
 
