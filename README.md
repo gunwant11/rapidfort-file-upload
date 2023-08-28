@@ -2,6 +2,9 @@
 
 This project is a REST API-based web server that accepts file uploads and provides information about the uploaded files. It's built using FastAPI, a web framework for building APIs with Python. The server also includes a simple UI for easy interaction. The server is containerized using Docker and can be deployed on Kubernetes. CI/CD is implemented using GitHub Actions.
 
+Docker image is available at [DockerHub](https://hub.docker.com/repository/docker/gunwant11/rf-uploader/)
+Kubernetes deployment is available at [Azure](http://20.219.169.21:8000/home)
+
 ## Getting Started
 
 ### Prerequisites
@@ -129,11 +132,56 @@ By default, the service is exposed on port 8000. You can access the service at `
 
 ### Build and Publish Workflow
 
-The `build-and-publish` GitHub Actions workflow builds the Docker image and publishes it to DockerHub with tags `latest` and a new version tag. You can trigger this workflow by pushing to the repository or manually from the Actions tab.
+The `build-and-publish` GitHub Actions workflow included to build and publish the Docker image to DockerHub.
+- ### Trigger
+  The workflow is triggered code is pushed to the `master` branch or pull request is created against the `master` branch.
+  Workflow can be triggered manually by clicking on the `Actions` tab and selecting the `build-and-publish` workflow.
+
+- ### Steps
+- Checkout the repository
+- Build the Docker image
+- Login to DockerHub
+- Push the image to DockerHub
+- Logout from DockerHub
+
+## Environment Variables
+
+The following environment variables are used in the project:
+- DOCKERHUB_USERNAME: DockerHub username
+- DOCKERHUB_TOKEN: DockerHub access token
+  
+  ### Flowchart
+  ![flowchart]('./static/images/flowchart.png')
 
 ## Bonus
 <!-- created an action delpoy.ymal to deploy our image wiht tag latest to aks cluster and   -->
-Created a workflow to deploy the image to AKS cluster. The workflow is triggered when a new image is pushed to DockerHub. The workflow uses the [Azure/k8s-deploy] action to deploy the image to AKS. The workflow is defined in the file `.github/workflows/deploy.yml`.
+Created a workflow to deploy the image to AKS cluster. 
+
+- ### Trigger
+  Workflow can be triggered manually by clicking on the `Actions` tab and selecting the `deploy` workflow.
+
+- ### Steps
+- Checkout the repository
+- Login to Azure
+- Set the AKS context
+- Deploy the image to AKS cluster
+- Logout from Azure
+  
+  ## Environment Variables
+  The following environment variables are used in the project:  
+  - AZURE_CREDENTIALS: Azure credentials
+   
+   use the following command to get the credentials
+   ```bash
+    az ad sp create-for-rbac --name <name> --scopes <scope/rg> --role contributor --sdk-auth
+    ```
+
+  ## Accessing the cluster
+  ```bash
+  az account set --subscription <subscription id>
+  az aks get-credentials --resource-group <resource group> --name <cluster name>
+  ```
+You can use `kubectl` to access the cluster now.
 
 
 ## Thank you for reading this far!
