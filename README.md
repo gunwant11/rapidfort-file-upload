@@ -130,6 +130,7 @@ The following environment variables are used in the project:
 ## Bonus
 <!-- created an action delpoy.ymal to deploy our image wiht tag latest to aks cluster and   -->
 Created a workflow to deploy the image to AKS cluster. 
+Delpoyment is available at [Endpoint](http://20.219.169.21:8000/home)
 
 - ### Trigger
   Workflow can be triggered manually by clicking on the `Actions` tab and selecting the `deploy` workflow.
@@ -154,4 +155,5 @@ You can use `kubectl` to access the cluster now.
 
 ## Thank you for reading this far!
 
-If you have any questions or suggestions, feel free to open an issue or contact me on [Twitter](https://twitter.com/gunwant11). Your feedback is appreciated!
+If you have any questions or suggestions, feel free to open an issue or contact me on [Twitter](https://twitter.com/gunwant11) or [LinkedIn](https://www.linkedin.com/in/gunwant-wankhede-37458b202/)
+. Your feedback is appreciated!
