@@ -54,35 +54,16 @@ Follow these steps to quickly set up and run the server:
 
 ## API Documentation
 
-### GET `/`
+| Endpoint       | GET `/`                |
+|----------------|------------------------|
+| **Description**| Endpoint to check the server status. |
+| **Response**   | - HTTP Status Code: 200 OK<br>- Response Body: `{"message": "API is running"}` |
 
-- **Description:** Endpoint to check the server status.
-- **Response:**
-  - HTTP Status Code: 200 OK
-  - Response Body: `{"message": "API is running"}`
-
-### POST `/upload/`
-
-- **Description:** Endpoint to upload files and retrieve their information.
-- **Request:**
-  - Method: POST
-  - Headers: `Content-Type: multipart/form-data`
-  - Body: Form data with the uploaded file(s)
-- **Response:**
-  - HTTP Status Code: 200 OK
-  - Response Body: JSON containing information about uploaded file(s), e.g.:
-    ```json
-    {
-      "files": [
-        {
-          "filename": "file.txt",
-          "mime_type": "text/plain",
-          "size": 1234,
-          "extension": "txt"
-        }
-      ]
-    }
-    ```
+| Endpoint       | POST `/upload/`                    |
+|----------------|------------------------------------|
+| **Description**| Endpoint to upload files and retrieve their information. |
+| **Request**    | - Method: POST<br>- Headers: `Content-Type: multipart/form-data`<br>- Body: Form data with the uploaded file(s) |
+| **Response**   | - HTTP Status Code: 200 OK<br>- Response Body: JSON containing information about uploaded file(s), e.g.:<br>```json<br>{<br>  "files": [<br>    {<br>      "filename": "file.txt",<br>      "mime_type": "text/plain",<br>      "size": 1234,<br>      "extension": "txt"<br>    }<br>  ]<br>}``` |
 
 ## Docker Specification
 
@@ -137,13 +118,6 @@ The `build-and-publish` GitHub Actions workflow included to build and publish th
   The workflow is triggered code is pushed to the `master` branch or pull request is created against the `master` branch.
   Workflow can be triggered manually by clicking on the `Actions` tab and selecting the `build-and-publish` workflow.
 
-- ### Steps
-- Checkout the repository
-- Build the Docker image
-- Login to DockerHub
-- Push the image to DockerHub
-- Logout from DockerHub
-
 ## Environment Variables
 
 The following environment variables are used in the project:
@@ -160,12 +134,6 @@ Created a workflow to deploy the image to AKS cluster.
 - ### Trigger
   Workflow can be triggered manually by clicking on the `Actions` tab and selecting the `deploy` workflow.
 
-- ### Steps
-- Checkout the repository
-- Login to Azure
-- Set the AKS context
-- Deploy the image to AKS cluster
-- Logout from Azure
   
   ## Environment Variables
   The following environment variables are used in the project:  
